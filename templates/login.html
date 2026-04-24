@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Social — Admin Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="login-body">
+  <div class="login-grid"></div>
+  <div class="login-glow"></div>
 
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-icon">✦</div>
+      <div>
+        <div class="login-brand">NexusSocial</div>
+        <div class="login-sub-badge">ADMIN PANEL</div>
+      </div>
+    </div>
+
+    <div class="login-title">Restricted Access</div>
+    <p class="login-desc">Sign in with your Nexus Social account. Only authorized officials can access this panel.</p>
+
+    <form id="loginForm">
+      <div class="fg">
+        <label class="fl">Email</label>
+        <input class="fi" name="email" type="email" placeholder="your@email.com" required />
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" name="password" type="password" placeholder="••••••••" required />
+      </div>
+      <div id="loginError" class="login-error" style="display:none;"></div>
+      <button type="submit" class="login-btn">Access Panel ✦</button>
+    </form>
+
+    <div class="login-footer">
+      This panel is for authorized Nexus Social staff only.<br/>
+      Unauthorized access is prohibited.
+    </div>
+  </div>
+
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('.login-btn');
+    const err = document.getElementById('loginError');
+    btn.disabled = true; btn.textContent = 'Verifying…';
+    err.style.display = 'none';
+    const fd = new FormData(e.target);
+    const data = Object.fromEntries(fd.entries());
+    try {
+      const r = await fetch('/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.error);
+      window.location.href = '/dashboard';
+    } catch(ex) {
+      err.textContent = ex.message;
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Access Panel ✦';
+    }
+  });
+  </script>
+</body>
+</html>

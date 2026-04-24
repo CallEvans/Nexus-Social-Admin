@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="panel-body">
+
+<!-- TOPBAR -->
+<header class="a-topbar">
+  <div class="a-logo">
+    <div class="logo-icon">✦</div>
+    <span class="a-brand">NexusSocial</span>
+    <div class="admin-chip">ADMIN</div>
+  </div>
+  <div class="a-topbar-right">
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="a-av" title="Signed in as {{ admin.full_name if admin else 'Admin' }}">
+      {{ admin.full_name[0] if admin else 'A' }}
+    </div>
+    <a href="/logout" class="a-logout">Sign Out</a>
+  </div>
+</header>
+
+<div class="a-layout">
+  <!-- SIDEBAR -->
+  <nav class="a-sidebar">
+    <div class="a-nav-group">
+      <div class="a-nav-label">Overview</div>
+      <div class="a-nav-item active" data-screen="dashboard" onclick="showScreen('dashboard')">
+        <span>📊</span> Dashboard
+      </div>
+      <div class="a-nav-item" data-screen="users" onclick="showScreen('users')">
+        <span>👥</span> Users
+        <div class="a-nav-badge" id="navUserCount">—</div>
+      </div>
+      <div class="a-nav-item" data-screen="reports" onclick="showScreen('reports')">
+        <span>🚨</span> Reports
+        <div class="a-nav-badge red" id="navReportCount">—</div>
+      </div>
+    </div>
+
+    <div class="a-nav-group">
+      <div class="a-nav-label">Management</div>
+      <div class="a-nav-item" data-screen="groups" onclick="showScreen('groups')">
+        <span>💬</span> Groups
+      </div>
+      <div class="a-nav-item" data-screen="controls" onclick="showScreen('controls')">
+        <span>🎛️</span> Controls
+      </div>
+      <div class="a-nav-item" data-screen="officials" onclick="showScreen('officials')">
+        <span>🏅</span> Officials
+      </div>
+    </div>
+
+    <div class="a-nav-bottom">
+      <div class="a-admin-card">
+        <div class="a-av sm">{{ admin.full_name[0] if admin else 'A' }}</div>
+        <div>
+          <div class="a-admin-name">{{ admin.full_name if admin else 'Admin' }}</div>
+          <div class="a-admin-role">{{ session.get('admin_role','admin').replace('_',' ').title() }} · #{{ admin.nexus_id if admin else '000001' }}</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="a-main" id="aMain">
+    <div class="a-loading">
+      <div class="a-loader">✦</div>
+    </div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="a-toasts" id="aToasts"></div>
+
+<!-- MODAL -->
+<div class="a-overlay" id="aOverlay" onclick="closeAModal()"></div>
+<div class="a-modal" id="aModal"></div>
+
+<script>
+  const ADMIN_ROLE = "{{ session.get('admin_role','moderator') }}";
+  const ADMIN_USER_ID = "{{ session.get('admin_user_id','') }}";
+  const ADMIN_NAME = "{{ admin.full_name if admin else 'Admin' }}";
+</script>
+<script src="/static/js/admin-ui.js"></script>
+<script src="/static/js/admin-dashboard.js"></script>
+<script src="/static/js/admin-users.js"></script>
+<script src="/static/js/admin-reports.js"></script>
+<script src="/static/js/admin-groups.js"></script>
+<script src="/static/js/admin-controls.js"></script>
+<script src="/static/js/admin-officials.js"></script>
+<script src="/static/js/admin-app.js"></script>
+</body>
+</html>
